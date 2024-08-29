@@ -1,0 +1,2235 @@
+
+/* Estilos generales */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* Barra de navegación */
+.navbar {
+  background-color: #2196F3;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  position: fixed; /* Hace que la barra sea fija */
+  top: 10px; /* Mantén la barra a 10px desde la parte superior, como antes */
+  left: 50%;
+  transform: translateX(-50%); /* Centra la barra horizontalmente */
+  width: calc(100% - 50px); /* Mantén el ancho ajustado con los márgenes */
+  transition: top 0.3s ease; /* Animación suave al mostrar/ocultar */
+
+  
+}
+
+
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-left h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #fff;
+  margin-right: 20px;
+}
+
+.navbar-right {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+}
+
+.navbar-right a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 5px 10px; /* Ajuste de margen para evitar que los elementos se peguen en pantallas pequeñas */
+}
+
+.navbar-right a:hover {
+  text-decoration: underline;
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+  .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .navbar-right {
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+  }
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links a {
+  margin-left: 1.5rem;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #dfe6e9;
+}
+
+/* Contenedores */
+.auth-container,
+.feed-container,
+.my-posts-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Formularios */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0 1rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+
+/* Contenedor de la aplicación */
+#app {
+  padding-top: 60px; /* Ajusta este valor según la altura de tu barra de navegación */
+}
+
+/* Feed y Posts */
+.feed-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.my-posts-container {
+  margin-bottom: 2rem;
+}
+
+.post-item {
+  max-width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+.post-item:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.post-item h3 {
+  font-size: 1.2rem; /* Ajuste del tamaño de los títulos */
+  margin-bottom: 10px;
+}
+
+.post-item p {
+  font-size: 0.9rem; /* Adjust the size as needed */
+  line-height: 1.5; /* Increase line-height for better readability */
+  color: #666;
+  margin-bottom: 10px;
+  overflow: hidden; /* Hide any overflow content */
+  text-overflow: ellipsis; /* Add ellipsis to indicate overflow */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+
+.post-meta {
+  font-size: 0.8rem;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.post-interactions {
+  margin-top: 15px;
+}
+
+.post-actions,
+.post-interactions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.post-actions button,
+.post-interactions button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.post-interactions button {
+  background-color: #2196F3;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.post-interactions button:hover {
+  background-color: #1976D2;
+}
+
+.post-interactions button.liked {
+  background-color: #2980b9;
+}
+
+.post-actions button {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.post-actions button:hover {
+  background-color: #c0392b;
+}
+
+.post-actions .edit-btn {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.post-actions .edit-btn:hover {
+  background-color: #27ae60;
+}
+
+.post-meta span {
+  font-size: 15px; /* Tamaño de fuente más grande */
+  color: #bbb;
+  font-weight: bold; /* Hace que el texto sea un poco más grueso */
+}
+
+.post-meta span.views {
+  display: flex;
+  align-items: center;
+}
+
+.post-meta span.views i {
+  margin-right: 0.25rem;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Estilos para la creación de posts */
+.post-creation {
+  margin-bottom: 2rem;
+}
+
+.post-creation input,
+.post-creation textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #000000;
+  background-color: #dadadaa4;
+}
+
+.post-creation button {
+  padding: 0.75rem 1.5rem;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.post-creation button:hover {
+  background-color: #2980b9;
+}
+
+/* Separador entre creación de posts y lista de posts */
+.divider {
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 2rem 0;
+}
+
+/* Estilos para la ventana emergente */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  padding: 20px;
+  max-width: 800px; /* Ajusta el ancho máximo del modal */
+  max-height: 80vh; /* Limita la altura máxima al 80% de la ventana */
+  overflow-y: auto; /* Habilita el scroll vertical si el contenido excede la altura máxima */
+  overflow-x: hidden; /* Elimina el scroll horizontal */
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Asegura que el contenido ocupe el 100% del espacio disponible */
+  box-sizing: border-box; /* Incluye el padding y el borde dentro del ancho total */
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.modal-content::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+
+
+.modal-content h3 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.modal-content p {
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+.modal-content .post-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #757575;
+}
+
+.close {
+  position: sticky; /* Hace que la X se quede fija en su posición al hacer scroll */
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #757575;
+  z-index: 10; /* Asegura que esté por encima del contenido */
+}
+
+
+
+.close:hover {
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 20px;
+    max-width: 800px; /* Puedes ajustar este valor según sea necesario */
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+  .modal-content h3 {
+      font-size: 20px;
+  }
+
+  .modal-content p {
+      font-size: 14px;
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100%; /* Asegura que no haya scroll en el fondo */
+}
+
+.post-image {
+  width: 100%;
+  height: auto;
+  max-height: 200px; /* Set a max height to make the image smaller */
+  object-fit: cover; /* Ensures the image covers the area without distorting */
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+
+
+.upload-status {
+  font-size: 14px;
+  color: #888;
+}
+
+.upload-progress {
+  font-size: 14px;
+  font-weight: bold;
+  color: #3498db;
+}
+
+
+.post-image-preview {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  object-fit: cover; /* Esto asegurará que la imagen se recorte en lugar de deformarse */
+}
+
+
+
+
+
+
+/* Sección de comentarios */
+.comments-section {
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+/* Elemento de comentario */
+.comment-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+/* Información del comentario (nombre del autor, contenido, etc.) */
+.comment-item p {
+  margin: 0 0 5px;
+  font-size: 14px;
+}
+
+.comment-item small {
+  color: #888;
+  font-size: 12px;
+}
+
+.comment-item button {
+  margin-top: 5px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.comment-item button:hover {
+  background-color: #2980b9;
+}
+
+/* Sección de respuestas anidadas */
+.replies-section {
+  margin-left: 20px;
+  margin-top: 10px;
+  padding-left: 10px;
+  border-left: 2px solid #ddd;
+}
+
+/* Elemento de respuesta */
+.reply-item {
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #e9e9e9;
+  border-radius: 5px;
+}
+
+.reply-item p {
+  margin: 0 0 5px;
+  font-size: 13px;
+}
+
+.reply-item small {
+  color: #777;
+  font-size: 11px;
+}
+
+/* Formulario para añadir respuesta */
+.reply-form {
+  margin-top: 10px;
+}
+
+.reply-form input {
+  width: calc(100% - 110px);
+  padding: 7px;
+  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.reply-form button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.reply-form button:hover {
+  background-color: #27ae60;
+}
+
+.reply-form button:last-child {
+  background-color: #e74c3c;
+  margin-left: 5px;
+}
+
+.reply-form button:last-child:hover {
+  background-color: #c0392b;
+}
+
+/* Formulario para añadir un nuevo comentario */
+.add-comment-form {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.add-comment-form input {
+  width: calc(100% - 100px);
+  padding: 10px;
+  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-comment-form button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-comment-form button:hover {
+  background-color: #2980b9;
+}
+
+.comments-section {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.comment-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid #3498db;
+}
+
+.comment-item p {
+  margin: 0 0 5px;
+  font-size: 15px;
+  color: #333;
+}
+
+.comment-item small {
+  color: #888;
+  font-size: 12px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.comment-item button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.comment-item button:hover {
+  background-color: #2980b9;
+}
+
+.replies-section {
+  margin-left: 30px;
+  margin-top: 10px;
+  padding-left: 10px;
+  border-left: 2px solid #ddd;
+}
+
+.reply-item {
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+}
+
+.reply-item p {
+  margin: 0 0 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.reply-item small {
+  color: #777;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.reply-form input {
+  width: calc(100% - 120px);
+  padding: 7px;
+  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.reply-form button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.reply-form button:hover {
+  background-color: #27ae60;
+}
+
+.reply-form button:last-child {
+  background-color: #e74c3c;
+  margin-left: 5px;
+}
+
+.reply-form button:last-child:hover {
+  background-color: #c0392b;
+}
+
+
+
+
+
+
+
+
+.notifications-container {
+  position: relative;
+  margin-left: 10px; /* Añadir un poco de espacio entre el ícono y otros elementos */
+}
+
+.notification-badge {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 7px;
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.notifications-container i {
+  font-size: 24px; /* Ajusta el tamaño del ícono */
+  color: white;
+  cursor: pointer;
+}
+
+.notifications-container i:hover {
+  color: #ffcc00;
+}
+
+.notifications-dropdown {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.notifications-dropdown h4 {
+  margin: 0;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 8px 8px 0 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.notifications-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.notifications-dropdown li {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.notifications-dropdown li.unread {
+  background-color: #f1f8ff; /* Fondo azul claro para notificaciones no leídas */
+  border-left: 4px solid #3498db; /* Borde azul para destacar */
+}
+
+.notifications-dropdown li:hover {
+  background-color: #f4f4f4;
+}
+
+.notifications-dropdown li span {
+  font-size: 14px;
+  color: #333;
+  flex-grow: 1;
+}
+
+.notifications-dropdown li small {
+  font-size: 12px;
+  color: #777;
+  display: block;
+  margin-top: 4px;
+}
+
+.notifications-dropdown li button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.notifications-dropdown li button:hover {
+  background-color: #2980b9;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+.post-image-preview {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  object-fit: cover; /* Esto asegurará que la imagen se recorte en lugar de deformarse */
+}
+
+
+
+
+
+
+
+/* Para dispositivos móviles */
+@media (max-width: 768px) {
+
+
+
+  .post-image-preview {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+    height: auto;
+    object-fit: cover;
+}
+
+
+
+}
+
+.post-modal-image {
+  width: 100%; /* Ocupa el 100% del ancho disponible */
+  height: auto; /* Asegura que la imagen mantenga su proporción */
+  object-fit: contain; /* Asegura que la imagen se ajuste al contenedor sin recortarse */
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+
+.post-modal-content {
+  padding: 20px;
+  max-width: 800px; /* Ajusta el ancho máximo del modal */
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+
+
+
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"]::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #3498db;
+  background-color: #fff;
+}
+
+.checkbox-label input[type="checkbox"]:checked::before {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.checkbox-label input[type="checkbox"]:checked::after {
+  content: '✔';
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  line-height: 18px;
+  margin-left: -2px;
+}
+
+.publish-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-left: 15px;
+}
+
+.publish-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.publish-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+
+
+/* Editar y Eliminar comentarios */
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-actions {
+  position: relative;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  color: #333;  /* Asegúrate de que los tres puntos también sean visibles */
+}
+
+.comment-menu {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+.comment-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;  /* Cambia el color del texto a un gris oscuro */
+}
+
+.comment-menu button:hover {
+  background-color: #f1f1f1;
+}
+
+
+/* Ajustes para que los posts en "Mis Posts" se vean más pequeños */
+.my-posts-container .post-item {
+  max-width: 600px; /* Reduce el ancho máximo */
+  margin: 10px auto; /* Centra el post */
+  padding: 10px; /* Reduce el padding interno */
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+}
+
+.my-posts-container .post-item h3 {
+  font-size: 1.1rem; /* Reduce el tamaño del título */
+}
+
+.my-posts-container .post-item p {
+  font-size: 0.85rem; /* Reduce el tamaño del texto */
+}
+
+.my-posts-container .post-meta {
+  font-size: 0.75rem; /* Reduce el tamaño de la metadata */
+  color: #888; /* Ajusta el color a un tono más suave */
+}
+
+.my-posts-container .post-image-preview {
+  max-height: 150px; /* Limita la altura máxima de la imagen */
+  object-fit: cover;
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
+
+
+.followers-following-container p {
+  background-color: #3498db; /* Color de fondo */
+  color: white; /* Color del texto */
+  padding: 8px 15px; /* Espaciado interno */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  font-weight: bold; /* Texto en negrita */
+  margin: 0;
+  min-width: 100px; /* Ancho mínimo */
+  text-align: center; /* Centrar el texto */
+}
+
+/* boton de crear posts */
+
+.open-create-post-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.open-create-post-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Perfil del creador */
+
+.creator-profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.creator-profile-container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.creator-profile-container .post-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo del nickname y btn seguir*/
+
+.author-link {
+  color: #3498db;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.author-link:hover {
+  color: #2980b9;
+}
+
+.follow-link {
+  color: #3498db;
+  font-weight: normal;
+  text-decoration: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.follow-link:hover {
+  color: #2980b9;
+}
+
+.follow-container {
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.follow-container a {
+  color: #3498db;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.follow-container a:hover {
+  text-decoration: underline;
+}
+
+
+/* Nuevo diseño para publicaciones premium */
+.premium-carousel-container {
+  background-color: #eef2f7;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  max-width: 900px; /* Limita el ancho máximo al igual que el feed-container */
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+}
+
+
+.premium-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 10px;
+  scrollbar-width: none; /* Para Firefox */
+  -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+}
+
+.premium-carousel::-webkit-scrollbar {
+  display: none; /* Ocultar la barra de desplazamiento en Chrome, Safari y Opera */
+}
+
+.premium-post-item {
+  min-width: 250px;
+  max-width: 250px; /* Fijar el ancho máximo de cada post */
+  height: 310px; /* Aumenta ligeramente la altura para acomodar más contenido */
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Asegura que el botón siempre esté en la parte inferior */
+}
+
+
+.premium-post-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover; /* Asegura que la imagen ocupe todo el espacio disponible */
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+
+
+.premium-post-item h3 {
+  font-size: 15px;
+  color: #2c3e50;
+  margin-bottom: 2px; /* Reduce aún más el margen inferior */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* Permite saltos de línea */
+  height: 2.4em; /* Mantiene el ajuste de altura */
+  line-height: 1.2em; /* Ajusta la altura de cada línea */
+}
+
+
+
+
+.premium-post-item p {
+  font-size: 12px; /* Reducir el tamaño de la fuente para permitir más texto */
+  color: #7f8c8d;
+  margin-top: 0; /* Eliminar margen superior */
+  margin-bottom: 5px; /* Reducir el margen inferior */
+  overflow: hidden; /* Elimina el scroll */
+  text-overflow: ellipsis;
+  display: block;
+  white-space: normal; /* Permite saltos de línea */
+  height: 4.2em; /* Aumenta la altura para mostrar más líneas */
+  line-height: 1.2em; /* Ajusta la altura de la línea */
+}
+
+
+
+
+
+
+.premium-post-item .post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.premium-post-item .post-meta .author-link {
+  flex-grow: 1;
+}
+
+.premium-post-item .post-meta i {
+  margin-left: 5px; /* Esto separará los íconos ligeramente */
+}
+
+.premium-post-item .post-meta .like-link {
+  cursor: pointer;
+}
+
+.premium-post-item .post-interactions button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px; /* Reducción del padding para hacer el botón más pequeño */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Ajuste del tamaño de fuente para un botón más pequeño */
+  width: auto; /* Deja que el botón tenga un ancho automático basado en su contenido */
+}
+
+.premium-post-item .post-interactions button:hover {
+  background-color: #2980b9;
+}
+
+.premium-post-item .post-interactions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto; /* Mantiene el botón en la parte inferior del contenedor */
+}
+
+
+.important-announcement-btn {
+  display: block;
+  margin: 0 auto; /* Centers the button horizontally */
+  margin-top: 20px; /* Adds some space above the button */
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.important-announcement-btn:hover {
+  background-color: #2980b9;
+}
+
+
+.announcement-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 80%;
+  max-width: 500px;
+}
+
+.announcement-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.announcement-modal h2 {
+  margin-top: 0;
+}
+
+.announcement-modal .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.announcement-modal .close-btn:hover {
+  color: #aaa;
+}
+
+/* Online Circle */
+
+.fa-circle {
+  font-size: 10px;
+  margin-left: 5px;
+}
+
+/* eyes counrt */
+.post-meta i.fa-eye {
+  color: #3498db; /* O cualquier otro color que prefieras */
+  margin-right: 5px; /* Espacio entre el ícono y el número de vistas */
+}
+
+/* Nickname seguidors y siguiendo */
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Ajusta según cómo quieras que se alineen */
+}
+
+.user-info h3 {
+  margin-right: 20px;
+}
+
+
+
+
+.followers-following-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.followers-button,
+.following-button {
+  background-color: #3498db;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  text-align: center;
+  flex: 1;
+  max-width: 45%; /* Ensure the buttons don't exceed half the container width */
+  font-size: 0.85rem;
+}
+
+.followers-button strong,
+.following-button strong {
+  display: block;
+}
+
+.followers-button .count,
+.following-button .count {
+  font-size: 0.9rem;
+  margin-top: 3px;
+}
+
+/* Responsive styling for small screens */
+@media (max-width: 600px) {
+  .followers-following-container {
+    justify-content: space-around;
+  }
+
+  .followers-button,
+  .following-button {
+    padding: 5px;
+    font-size: 0.75rem;
+    max-width: 45%; /* Keep the buttons side by side within their container */
+  }
+
+  .followers-button .count,
+  .following-button .count {
+    font-size: 0.8rem;
+    margin-top: 2px;
+  }
+}
+
+/* Contenedores generales en modo claro */
+.feed-container,
+.post-item,
+.comment-container {
+  background-color: #f9f9f9; /* Fondo claro */
+  color: #000000; /* Texto oscuro */
+  border: 1px solid #e0e0e0; /* Borde claro */
+}
+
+
+/* Modo Oscuro */
+body.dark-mode {
+  background-color: #121212; /* Fondo general oscuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+.navbar.dark-mode {
+  background-color: #1f1f1f; /* Color de la barra de navegación oscuro */
+}
+
+.auth-container.dark-mode,
+.feed-container.dark-mode,
+.my-posts-container.dark-mode {
+  background-color: #1f1f1f; /* Fondo de contenedores oscuros */
+  color: #e0e0e0; /* Texto claro */
+  box-shadow: none; /* Eliminar sombras para un estilo más plano */
+}
+
+.post-item.dark-mode {
+  background-color: #292929; /* Fondo de los posts en modo oscuro */
+  border: 1px solid #333333; /* Borde más oscuro */
+}
+
+button.dark-mode {
+  background-color: #3498db; /* Mantener el color de los botones */
+}
+
+button.dark-mode:hover {
+  background-color: #2980b9; /* Mantener el color hover de los botones */
+}
+
+/* Otros elementos que necesiten estilos en modo oscuro */
+body.dark-mode .premium-post-item {
+  background-color: #1f1f1f; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+  border: 1px solid #333333; /* Borde más oscuro */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Sombra más tenue */
+}
+
+body.dark-mode .premium-post-item a {
+  color: #3498db; /* Asegurar que los enlaces se vean bien en modo oscuro */
+}
+
+body.dark-mode .premium-post-item h3 {
+  color: #e0e0e0; /* Asegurar que el título sea visible en modo oscuro */
+}
+
+/* Modo oscuro para los contenedores */
+body.dark-mode .post-item,
+body.dark-mode .comments-section,
+body.dark-mode .add-comment-form,
+body.dark-mode .comment-container {
+  background-color: #1e1e1e; /* Fondo oscuro para los contenedores */
+  color: #e0e0e0; /* Texto claro */
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #333333; /* Borde oscuro */
+}
+
+/* Modo oscuro para el modal de anuncio importante */
+body.dark-mode .modal-content {
+  background-color: #333333; /* Fondo oscuro del modal */
+  color: #e0e0e0; /* Texto claro */
+  border: 1px solid #555555; /* Borde más oscuro */
+}
+
+body.dark-mode .modal-content button {
+  background-color: #2196F3; /* Mantener el color del botón */
+  color: #ffffff; /* Color del texto del botón */
+}
+
+body.dark-mode .modal-content button:hover {
+  background-color: #1976D2; /* Color del botón al pasar el cursor */
+}
+
+/* Modo oscuro para el botón "Ver Anuncio Importante" */
+body.dark-mode .important-announcement-button {
+  background-color: #3498db; /* Fondo del botón */
+  color: #ffffff; /* Texto blanco */
+}
+
+body.dark-mode .important-announcement-button:hover {
+  background-color: #2980b9; /* Fondo del botón al pasar el cursor */
+}
+
+
+/* Modo oscuro para los contenedores */
+body.dark-mode .premium-carousel-container,
+body.dark-mode .feed-container,
+body.dark-mode .my-posts-container,
+body.dark-mode .auth-container,
+body.dark-mode .modal-content,
+body.dark-mode .post-item {
+    background-color: #1e1e1e; /* Fondo gris oscuro */
+    color: #e0e0e0; /* Texto claro */
+    border: 1px solid #333333; /* Borde más oscuro */
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="email"],
+body.dark-mode textarea,
+body.dark-mode .add-comment-form input,
+body.dark-mode .add-comment-form button {
+  background-color: #2c2c2c; /* Fondo oscuro */
+  color: #ffffff; /* Texto claro */
+  border: 1px solid #444444; /* Borde oscuro */
+  border-radius: 4px;
+}
+
+/* Modo oscuro para los comentarios */
+body.dark-mode .comment-container {
+  background-color: #2c2c2c; /* Fondo oscuro */
+  color: #ffffff; /* Texto claro */
+  border: 1px solid #444444; /* Borde ligeramente más claro que el fondo */
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+body.dark-mode .comment-container .comment-header p {
+  color: #ffffff; /* Asegura que el contenido del comentario sea visible */
+}
+
+body.dark-mode .comment-container .comment-header strong {
+  color: #e0e0e0; /* Asegura que el nombre del autor sea visible */
+}
+
+body.dark-mode .comment-container .comment-actions button {
+  background-color: #3498db; /* Mantener el color de los botones */
+  color: #ffffff; /* Color del texto del botón */
+}
+
+body.dark-mode .comment-container .comment-actions button:hover {
+  background-color: #2980b9; /* Color del botón al pasar el cursor */
+}
+
+body.dark-mode .reply-form input {
+  background-color: #444444; /* Fondo oscuro para el campo de entrada */
+  color: #ffffff; /* Texto claro */
+}
+
+body.dark-mode .reply-form button {
+  background-color: #3498db; /* Mantener el color de los botones */
+  color: #ffffff; /* Color del texto del botón */
+}
+
+body.dark-mode .reply-item p {
+  color: #d3d3d3; /* Texto claro para las respuestas */
+}
+
+body.dark-mode .comment-container small {
+  color: #b0b0b0; /* Color más claro para las fechas */
+}
+
+/* Estilos específicos para el modo oscuro del modal de anuncio */
+body.dark-mode .announcement-modal {
+  background-color: #333333; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+  border: 1px solid #444444; /* Borde ligeramente más claro que el fondo */
+}
+
+body.dark-mode .announcement-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semi-transparente */
+}
+
+body.dark-mode .announcement-modal h2,
+body.dark-mode .announcement-modal p,
+body.dark-mode .announcement-modal ul {
+  color: #ffffff; /* Asegura que todo el texto sea visible */
+}
+
+body.dark-mode .announcement-modal .bg-blue-500 {
+  background-color: #3498db; /* Mantén el color del botón */
+  color: #ffffff; /* Texto claro en el botón */
+}
+
+body.dark-mode .announcement-modal .bg-blue-500:hover {
+  background-color: #2980b9; /* Color del botón al pasar el cursor */
+}
+
+
+/* Modo oscuro para el perfil del creador */
+body.dark-mode .creator-profile-container,
+body.dark-mode .creator-info,
+body.dark-mode .followers-following-container,
+body.dark-mode .search-bar,
+body.dark-mode .post-item {
+    background-color: #1e1e1e; /* Fondo oscuro */
+    color: #e0e0e0; /* Texto claro */
+    border: 1px solid #333333; /* Borde más oscuro */
+}
+
+/* Ajustes específicos para los botones */
+body.dark-mode .followers-button,
+body.dark-mode .following-button {
+    background-color: #3498db; /* Fondo de botones */
+    color: #ffffff; /* Texto de los botones */
+}
+
+body.dark-mode .followers-button .count,
+body.dark-mode .following-button .count {
+    color: #ffffff; /* Texto del conteo de seguidores/seguidos */
+}
+
+/* Asegurar que el texto en la barra de búsqueda sea claro */
+body.dark-mode .search-bar {
+    background-color: #2c2c2c; /* Fondo de la barra de búsqueda */
+    color: #ffffff; /* Texto claro */
+    border: 1px solid #444444; /* Borde oscuro */
+}
+
+/* Estilos para los títulos y textos dentro del perfil del creador */
+body.dark-mode .creator-profile-container h3,
+body.dark-mode .creator-profile-container p,
+body.dark-mode .creator-profile-container a {
+    color: #e0e0e0; /* Asegura que los textos y enlaces sean visibles en modo oscuro */
+}
+
+/* Para asegurarse de que los posts dentro del perfil del creador se adapten al modo oscuro */
+body.dark-mode .post-item {
+    background-color: #292929; /* Fondo oscuro para los posts */
+    border: 1px solid #333333; /* Borde más oscuro */
+    color: #e0e0e0; /* Texto claro */
+}
+
+/* Otros ajustes específicos para el modo oscuro en el perfil del creador */
+body.dark-mode .post-meta a {
+    color: #3498db; /* Color del enlace de autor */
+}
+
+body.dark-mode .post-meta span,
+body.dark-mode .post-interactions button {
+    color: #e0e0e0; /* Asegura que los textos y botones sean visibles en modo oscuro */
+}
+
+.dark-mode .premium-warning {
+  background-color: #2c2c2c; /* Fondo oscuro */
+  color: #f8f9fa; /* Texto claro */
+  border: 1px solid #444; /* Borde oscuro */
+}
+
+.dark-mode .premium-warning .premium-link {
+  color: #3498db; /* Color de enlace que resalta en modo oscuro */
+}
+
+.dark-mode .premium-warning p {
+  color: #f8f9fa; /* Asegurarse de que el texto sea blanco */
+}
+
+.dark-mode .view-link .views-count {
+  color: #3498db; /* Cambia este color al que desees */
+}
+
+.dark-mode .post-meta .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -10px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+.dark-mode .premium-carousel-container .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -10px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+.dark-mode .my-posts-container .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+.dark-mode .creator-profile-container .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+
+.post-preview p {
+  white-space: pre-wrap;
+}
+
+.responsive-quill-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+.premium-warning {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.premium-warning-text {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.premium-link {
+  display: inline-block;
+  margin: 5px 0;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.premium-link:hover {
+  color: #2980b9;
+}
+
+
+
+
+
+
+
+.view-more-link {
+  color: #2370a3; /* Color del enlace */
+  cursor: pointer;
+  text-decoration: underline;
+  margin-right: 15px; /* Espaciado entre "Ver más" y el botón de likes */
+}
+
+.view-more-link:hover {
+  text-decoration: none; /* Elimina el subrayado al pasar el mouse */
+}
+
+.like-link {
+  color: rgb(187, 183, 183); /* Color del corazón por defecto */
+  cursor: pointer;
+}
+
+.like-link.liked {
+  color: #3498db; /* Color del corazón cuando se ha dado like */
+}
+
+.view-link .views-count {
+  color: #3498db; /* Cambia este color al que desees */
+}
+
+
+
+
+.post-meta .fa-circle {
+  margin-left: 5px; /* Reduce el margen izquierdo para acercar el círculo */
+  vertical-align: middle; /* Alinea verticalmente el círculo con el texto */
+}
+
+
+
+/* Estilo para el corazón cuando se ha dado like en modo oscuro */
+body.dark-mode .like-link.liked {
+  color: #3498db; /* Color del corazón cuando se ha dado like */
+}
+
+
+/* Estilos específicos para el botón de "like" en las publicaciones premium */
+.premium-post-item .like-link .view-link{
+    font-size: 0.9em; /* Reduce el tamaño del texto */
+    display: inline-flex;
+    align-items: center;
+}
+
+.premium-post-item .like-link i.fa-heart .view-link {
+    font-size: 1em; /* Reduce el tamaño del icono */
+    margin-right: 4px;
+}
+
+
+.premium-post-item .author-info .fa-circle {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+
+.my-posts-container .like-link.liked i {
+  color: #3498db !important;
+}
+
+
+.like-link.liked i {
+  color: #3498db; /* O el color que desees */
+}
+
+/* Añade esto a tu archivo styles.css */
+.login-btn {
+  margin-bottom: 10px; /* Ajusta el valor según lo necesites */
+}
+
+.auth-container button {
+  margin-bottom: 10px; /* Espacio entre los botones */
+  width: 100%; /* Asegura que los botones se mantengan del mismo tamaño */
+}
+
+@media (max-width: 600px) {
+    .auth-container button {
+        margin-bottom: 10px;
+    }
+}
+
+/* Menú lateral */
+.sidebar {
+  display: none;
+  position: fixed;
+  right: -250px; /* Fuera de la pantalla por defecto */
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #3498db;
+  transition: right 0.3s ease;
+  flex-direction: column;
+  padding: 20px;
+  z-index: 9999; /* Asegura que esté por encima de todo */
+}
+
+.sidebar a, .sidebar button {
+  color: white;
+  padding: 15px 0;
+  text-align: left;
+  border-bottom: 1px solid #2980b9;
+  width: 100%;
+}
+
+#menuToggle {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white; /* Cambia el color a blanco */
+  margin-left: auto; /* Empuja el ícono a la derecha */
+}
+
+/* Mostrar el ícono de hamburguesa y ocultar los enlaces en pantallas pequeñas */
+@media (max-width: 768px) {
+  #menuToggle {
+    display: block;
+    margin-left: auto; /* Resetea el margen izquierdo */
+    margin-right: auto; /* Empuja el ícono a la derecha */
+    order: 2; /* Cambia el orden para que aparezca después del título */
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  order: 1; /* Asegura que el título esté a la izquierda */
+  flex-grow: 1; /* Permite que el título ocupe el espacio restante */
+}
+
+  .navbar-right a, .navbar-right button, .notifications-container {
+      display: none;
+  }
+
+  .sidebar {
+      display: flex;
+      right: -290px; /* Asegúrate de que esté fuera de la pantalla inicialmente */
+  }
+
+  .sidebar.active {
+      right: 0; /* Desliza el menú dentro de la pantalla */
+  }
+}
+
+/* Restablecer el diseño en pantallas grandes */
+@media (min-width: 769px) {
+  #menuToggle {
+      display: none;
+  }
+
+  .navbar-right a, .navbar-right button, .notifications-container {
+      display: flex;
+  }
+
+  .sidebar {
+      display: none;
+  }
+}
+
+body, html {
+  overflow-x: hidden; /* Elimina cualquier scroll horizontal */
+}
+
+
+.post-meta .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -10px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+.premium-carousel-container .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -10px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+.my-posts-container .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+.creator-profile-container .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0px; /* Espacio aún más mínimo */
+  vertical-align: middle;
+  color: #3498db;
+}
+
+
+
+
+
+
+
+.chat-window {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+.chat-header {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 80%;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border-radius: 18px;
+  word-wrap: break-word;
+}
+
+.message.sent {
+  align-self: flex-end;
+  background-color: #3498db;
+  color: white;
+}
+
+.message.received {
+  align-self: flex-start;
+  background-color: #f1f0f0;
+  color: black;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 8px 12px;
+  margin-right: 10px;
+}
+
+.chat-input button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.chat-input button:hover {
+  background-color: #2980b9;
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode .chat-window {
+  background-color: #2c3e50;
+  border-color: #34495e;
+}
+
+body.dark-mode .chat-header {
+  background-color: #2980b9;
+}
+
+body.dark-mode .chat-messages {
+  background-color: #34495e;
+}
+
+body.dark-mode .message.received {
+  background-color: #465c71;
+  color: white;
+}
+
+body.dark-mode .chat-input {
+  border-top-color: #465c71;
+}
+
+body.dark-mode .chat-input input {
+  background-color: #465c71;
+  color: white;
+  border-color: #576c82;
+}
+
+body.dark-mode .chat-input button {
+  background-color: #3498db;
+}
+
+body.dark-mode .chat-input button:hover {
+  background-color: #2980b9;
+}
+
+.admin-panel-link {
+  display: block; /* o inline-block */
+  margin: 0 auto;
+  text-align: center; /* Asegura que el texto dentro del enlace esté centrado */
+}
+
+
+
+/* Ajustes generales para los posts */
+.post-item {
+  position: relative;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estilos para el botón de opciones */
+.post-options {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.options-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #3498db; /* Color azul para mejor visibilidad */
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.options-button:hover {
+  background-color: rgba(52, 152, 219, 0.1); /* Fondo azul claro al hover */
+}
+
+/* Estilos para el menú de opciones */
+.post-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10;
+  min-width: 120px;
+}
+
+.post-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.post-menu button:hover {
+  background-color: #f5f5f5;
+}
+
+/* Ajustes para el modo oscuro */
+body.dark-mode .options-button {
+  color: #64b5f6; /* Azul más claro para modo oscuro */
+}
+
+body.dark-mode .post-menu {
+  background-color: #333;
+  border-color: #444;
+}
+
+body.dark-mode .post-menu button {
+  color: #e0e0e0;
+}
+
+body.dark-mode .post-menu button:hover {
+  background-color: #444;
+}
+
+
+
+.premium-post-item {
+  position: relative;
+  /* ... otros estilos existentes ... */
+}
+
+.premium-post-item .post-options {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
+.premium-post-item .options-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ffffff; /* Color blanco para que se vea bien sobre la imagen */
+  text-shadow: 0 0 3px rgba(0,0,0,0.5); /* Sombra para mejorar la visibilidad */
+}
+
+.premium-post-item .post-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 20;
+  min-width: 120px;
+}
+
+.premium-post-item .post-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333333;
+}
+
+.premium-post-item .post-menu button:hover {
+  background-color: #f5f5f5;
+}
+
+/* Ajustes para modo oscuro */
+body.dark-mode .premium-post-item .post-menu {
+  background-color: #333333;
+  border-color: #444444;
+}
+
+body.dark-mode .premium-post-item .post-menu button {
+  color: #ffffff;
+}
+
+body.dark-mode .premium-post-item .post-menu button:hover {
+  background-color: #444444;
+}
+
+
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  padding: 8px;
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  margin-top: -1px;
+  cursor: pointer;
+}
+
+ul li a {
+  text-decoration: none;
+  color: #333;
+}
+
+ul li a:hover {
+  color: #3498db;
+}

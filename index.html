@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CreadorApp - Aplicación para Creadores de Contenido">
+    <meta name="theme-color" content="#3498db">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <title>CreadorApp</title>
+
+   
+</head>
+<body>
+
+    <div id="app">
+        <div class="navbar">
+            <div class="navbar-left">
+                <div id="menuToggle">
+                    ☰
+                </div>
+                <h1 id="scrollToTop" @click="goToHomeSection">CreadorApp</h1>
+            </div>
+            <div class="navbar-right">
+                <a href="#" @click="showSection('feed')">Feed Público</a>
+                <a href="#" @click="showSection('myPosts')" v-if="isLoggedIn">Mis Posts</a>
+                <a href="#" @click="showSection('chats')" v-if="isLoggedIn">
+                    Chats
+                    <span class="badge" v-if="unreadMessagesCount > 0">{{ unreadMessagesCount }}</span>
+                  </a>
+                <a href="#" @click="showSection('auth')" v-if="!isLoggedIn && !isRegistering">Iniciar Sesión</a>
+                <a href="#" @click="toggleAuthMode()" v-if="!isLoggedIn && isRegistering">Iniciar Sesión</a>
+                <a href="#rules" @click.prevent="showRulesPopup">Ver Reglas</a>
+                <button id="toggleDarkMode">Modo Oscuro</button>
+                <div class="notifications-container" v-if="isLoggedIn">
+                    <a href="#" @click="showNotifications" ref="notificationsIcon">
+                        <i class="fa fa-bell"></i>
+                        <span v-if="unreadNotificationsCount > 0" class="notification-badge">{{ unreadNotificationsCount }}</span>
+                    </a>
+                </div>
+                <a href="#" @click="logout()" v-if="isLoggedIn">Cerrar Sesión</a>
+
+            </div>
+        </div>
+    
+        <!-- Menú lateral que se desplegará -->
+        <div id="sidebarMenu" class="sidebar">
+            <a href="#" @click="showSection('feed')">Feed Público</a>
+            <a href="#" @click="showSection('myPosts')" v-if="isLoggedIn">Mis Posts</a>
+            <a href="#" @click="showSection('chats')" v-if="isLoggedIn">
+                Chats
+                <span class="badge" v-if="unreadMessagesCount > 0">{{ unreadMessagesCount }}</span>
+              </a>
+            <a href="#" @click="showSection('auth')" v-if="!isLoggedIn && !isRegistering">Iniciar Sesión</a>
+            <a href="#" @click="toggleAuthMode()" v-if="!isLoggedIn && isRegistering">Iniciar Sesión</a>
+            <a href="#rules" @click.prevent="showRulesPopup">Ver Reglas</a>
+            <button id="toggleDarkModeSidebar">Modo Oscuro</button>
+            <div class="notifications-container" v-if="isLoggedIn">
+                <a href="#" @click="showNotifications" ref="notificationsIcon">
+                    <i class="fa fa-bell"></i>
+                    <span v-if="unreadNotificationsCount > 0" class="notification-badge">{{ unreadNotificationsCount }}</span>
+                </a>
+            </div>
+            <a href="#" @click="logout()" v-if="isLoggedIn">Cerrar Sesión</a>
+        </div>
+
+        
+
+        <br>
+
+    <button v-if="showAnnouncementButton" @click="showAnnouncement" class="important-announcement-btn">
+        Ver Anuncio Importante
+    </button>
+    
+    <!-- Enlace o botón para acceder al Panel de Administración -->
+    <a href="#" v-if="isAdmin" @click.prevent="showAdminPanel" class="admin-panel-link">Panel de Administración</a>
+    <a href="#" @click="showSection('reportManagement')" v-if="isAdmin" class="admin-panel-link">Gestión de Reportes</a>
+
+
+    
+    <br>
+
+    <input type="text" v-model="userSearchQuery" placeholder="Buscar usuarios..." class="search-bar" />
+    <ul v-if="filteredUserList.length > 0">
+      <li v-for="user in filteredUserList" :key="user.id">
+        <a href="#" @click.prevent="viewUserProfile(user.id)">{{ user.nickname }}</a>
+      </li>
+    </ul>
+    <p v-else-if="userSearchQuery.trim() !== ''">No se encontraron usuarios con ese nickname.</p>
+    
+    
+    
+
+
+
+<!-- Sección de Publicaciones Premium -->
+<div class="premium-carousel-container" v-if="sortedPremiumPosts.length > 0 && currentSection === 'feed'">
+    <h2>Premium Posts</h2>
+    <div class="premium-carousel">
+        <div class="premium-post-item" v-for="post in sortedPremiumPosts" :key="post.uniqueKey">
+            <div class="post-options">
+                <button @click="togglePostMenu(post.id)" class="options-button">⋮</button>
+                <div v-if="activePostMenu === post.id" class="post-menu">
+                  <button @click="showReportModal(post)">Reportar</button>
+                  <!-- Otras opciones del menú -->
+                </div>
+              </div>
+            <!-- Mostrar la imagen si existe -->
+            <div v-if="post.imageUrl" class="post-image-container">
+                <img :src="post.imageUrl" alt="Imagen del post" class="post-image-preview">
+            </div>
+            <h3>{{ post.title || 'Sin título' }}</h3>
+            <p v-html="stripHtml(post.content).slice(0, 100) + '...'"></p>
+            <div class="post-meta">
+                <div class="author-info">
+                    <a href="#" @click.prevent="viewCreatorProfile(post.authorId)" class="author-link">
+                        {{ post.authorNickname || 'Autor desconocido' }}
+                    </a>
+                    <span v-if="post.authorIsVerified" class="verified-badge">
+                        <i class="fa fa-check-circle"></i>
+                    </span>
+                    <span v-if="post.isOnline">
+                        <i class="fa fa-circle" style="color: rgb(1, 156, 1);"></i>
+                    </span>
+                </div>
+                <div>
+                    <span @click="likePost(post.id, post.authorId)" :class="{'liked': post.liked}" class="like-link">
+                        <i class="fa fa-heart"></i> {{ post.likeCount || 0 }}
+                    </span>
+                    <span class="view-link">
+                        <i class="fa fa-eye"></i> <span class="views-count">{{ post.viewsCount }}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="post-interactions">
+                <button @click="openPost(post.id, post.authorId)">Ver más</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    
+  
+
+<!-- Sección del Feed Público -->
+<div v-if="currentSection === 'feed'" class="feed-container">
+    <h2>Feed Público</h2>
+    <div class="post-item" v-for="post in allPosts" :key="post.id + '-' + post.authorId + '-public'">
+        <div class="post-options">
+            <button @click="togglePostMenu(post.id)" class="options-button">⋮</button>
+            <div v-if="activePostMenu === post.id" class="post-menu">
+              <button @click="showReportModal(post)">Reportar</button>
+              <!-- Otras opciones del menú -->
+            </div>
+          </div>
+        <!-- Nickname y estado online arriba -->
+        <div class="post-meta" style="margin-bottom: 10px;">
+            <span style="float: left;">
+                <a href="#" @click.prevent="viewCreatorProfile(post.authorId)" class="author-link">
+                    {{ post.authorNickname }}
+                </a>
+                <span v-if="post.authorIsVerified" class="verified-badge">
+                    <i class="fa fa-check-circle"></i>
+                </span>
+                <span v-if="post.isOnline">
+                    <i class="fa fa-circle" style="color: rgb(1, 156, 1);"></i>
+                </span>
+            </span>
+            <div style="clear: both;"></div>
+        </div>
+
+        <h3>{{ post.title }}</h3>
+        <div v-if="post.imageUrl">
+            <img :src="post.imageUrl" alt="Imagen del post" class="post-image-preview">
+        </div>
+        <!-- Cambia esto para que escape el HTML y muestre solo texto -->
+        <p v-html="stripHtml(post.content).replace(/(?:\r\n|\r|\n)/g, ' ').slice(0, 150) + '...'"></p>
+
+        <!-- Likes, vistas y Ver más abajo -->
+        <div class="post-meta">
+            <span style="float: left;">
+                <span @click="openPost(post.id, post.authorId)" class="view-more-link">Ver más</span>
+            </span>
+            <span style="float: right;">
+                <span @click="likePost(post.id, post.authorId)" :class="{'liked': post.liked}" class="like-link">
+                    <i class="fa fa-heart"></i> {{ post.likeCount || 0 }}
+                </span>
+                <span class="view-link">
+                    <i class="fa fa-eye"></i> <span class="views-count">{{ post.viewsCount }}</span>
+                </span>
+            </span>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    
+    
+    
+  
+
+<!-- Contenedor de la ventana emergente -->
+<div v-if="isPostOpen" class="modal" @click.self="closePost()">
+    <div class="modal-content">
+        <span class="close" @click="closePost()">&times;</span>
+        <h3>{{ selectedPost.title }}</h3>
+        <div v-if="selectedPost.imageUrl">
+            <img :src="selectedPost.imageUrl" alt="Imagen del post" class="post-modal-image">
+        </div>
+        <p v-html="selectedPost.content.replace(/\n/g, '<br>')"></p>          
+        
+        <div class="post-meta">
+            <span>
+                <a href="#" @click.prevent="viewCreatorProfile(selectedPost.authorId)" class="author-link">
+                    {{ selectedPost.authorNickname }}
+                </a>
+                <span v-if="!isCurrentUser(selectedPost.authorId)">
+                    <a href="#" @click.prevent="isFollowing(selectedPost.authorId) ? unfollowUser(selectedPost.authorId) : followUser(selectedPost.authorId)" class="follow-link">
+                        {{ isFollowing(selectedPost.authorId) ? 'Dejar de Seguir' : 'Seguir' }}
+                    </a>
+                </span>
+            </span>
+            <span>{{ formatTimestamp(selectedPost.timestamp) }}</span>
+            <span><i class="fa fa-eye"></i> {{ selectedPost.viewsCount }}</span>
+        </div>
+
+        
+
+        <!-- Sección de comentarios y respuestas -->
+        <div v-if="selectedPost && selectedPost.comments" class="comments-section">
+            <div v-for="(comment, commentId) in selectedPost.comments" :key="commentId" class="comment-item comment-container">
+                <div class="comment-header">
+                    <p><strong>{{ comment.authorNickname }}</strong>: {{ comment.content }}</p>
+                    <div v-if="comment.authorId === userId" class="comment-actions">
+                        <button @click="toggleCommentMenu(commentId)" class="menu-button">⋮</button>
+                        <div v-if="commentMenuOpen === commentId" class="comment-menu">
+                            <button @click="editComment(selectedPost.id, commentId)">Editar</button>
+                            <button @click="deleteComment(selectedPost.id, commentId)">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+                <small>{{ formatTimestamp(comment.timestamp) }}</small>
+        
+                <!-- Botón para responder -->
+                <button @click="setReplyToComment(commentId)">Responder</button>
+        
+                <!-- Mostrar respuestas anidadas -->
+                <div v-if="comment.replies" class="replies-section">
+                    <div v-for="(reply, replyId) in comment.replies" :key="replyId" class="reply-item comment-container">
+                        <p><strong>{{ reply.authorNickname }}</strong>: {{ reply.content }}</p>
+                        <small>{{ formatTimestamp(reply.timestamp) }}</small>
+                    </div>
+                </div>
+        
+                <!-- Formulario para responder -->
+                <div v-if="replyingToCommentId === commentId" class="reply-form">
+                    <input v-model="newReplyContent" placeholder="Escribe tu respuesta...">
+                    <button @click="addReply(selectedPost.id, selectedPost.authorId, commentId)">Enviar</button>
+                    <button @click="cancelReply">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Formulario para añadir un nuevo comentario -->
+        <div class="add-comment-form">
+            <input v-model="newCommentContent" placeholder="Escribe un comentario...">
+            <button @click="addComment(selectedPost.id, selectedPost.authorId)">Comentar</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+    
+
+
+
+<!-- Sección de Mis Posts -->
+<div v-if="currentSection === 'myPosts'" class="my-posts-container">
+    <div class="user-info">
+        <h3 style="display: inline;">
+            {{ userNickname }}
+            <span v-if="userData.isVerified" class="verified-badge">
+                <i class="fa fa-check-circle"></i> <!-- Ícono de verificación -->
+            </span>
+        </h3>
+        <div class="followers-following-container">
+            <div class="followers-button">
+                <strong>Seguidores:</strong>
+                <div class="count">{{ userData.followers ? Object.keys(userData.followers).length : 0 }}</div>
+            </div>
+            <div class="following-button">
+                <strong>Siguiendo:</strong>
+                <div class="count">{{ userData.following ? Object.keys(userData.following).length : 0 }}</div>
+            </div>
+        </div>
+    </div>
+
+    <button v-if="!userData.isVerified" @click="requestVerification">
+        Solicitar Verificación
+    </button>
+    
+
+    <h2>Mis Posts</h2>
+
+    <!-- Barra de búsqueda -->
+    <input type="text" v-model="searchQuery" placeholder="Buscar por título..." class="search-bar" />
+
+    <!-- Botón para abrir el popup de crear post -->
+    <button @click="showCreatePostPopup = true" class="open-create-post-btn">Crear Post</button>
+
+    <!-- Lista de posts filtrados -->
+    <div class="post-item" v-for="post in filteredPosts" :key="post.id + '-mypost'">
+        <h3>{{ post.title || 'Sin título' }}</h3>
+
+        <!-- Mostrar la imagen si existe -->
+        <div v-if="post.imageUrl" class="post-image-container">
+            <img :src="post.imageUrl" alt="Imagen del post" class="post-image-preview">
+        </div>
+        
+        <p v-html="stripHtml(post.content).slice(0, 150) + '...'"></p>
+        
+
+        <!-- Likes, vistas y Ver más abajo -->
+        <div class="post-meta">
+            <span>{{ formatTimestamp(post.timestamp) }}</span>
+            <span style="float: left;">
+                <span @click="openPost(post.id, post.authorId)" class="view-more-link">Ver más</span>
+            </span>
+            <span style="float: right;">
+                <span @click="likePost(post.id, post.authorId)" :class="{'liked': post.liked}" class="like-link" :style="post.liked ? 'color: #3498db;' : ''">
+                    <i class="fa fa-heart"></i> {{ post.likeCount || 0 }}
+                </span>
+                
+                <span class="view-link">
+                    <i class="fa fa-eye"></i> <span class="views-count">{{ post.viewsCount }}</span>
+                </span>
+            </span>
+            <div style="clear: both;"></div>
+        </div>
+
+        <!-- Botones de Editar y Eliminar -->
+        <div class="post-actions">
+            <button class="edit-btn" @click="editPost(post)">Editar</button>
+            <button @click="deletePost(post.id)">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Sección de Perfil del Creador -->
+<div v-if="currentSection === 'creatorProfile'" class="creator-profile-container">
+    <!-- Información del Creador -->
+    <div class="creator-info">
+        <h3 style="display: inline;">
+            {{ selectedUserNickname }}
+            <span v-if="selectedUserData.isVerified" class="verified-badge">
+                <i class="fa fa-check-circle"></i> <!-- Ícono de verificación -->
+            </span>
+        </h3>
+        <div class="followers-following-container">
+            <div class="followers-button">
+                <strong>Seguidores:</strong>
+                <div class="count">{{ selectedUserData.followers ? Object.keys(selectedUserData.followers).length : 0 }}</div>
+            </div>
+            <div class="following-button">
+                <strong>Siguiendo:</strong>
+                <div class="count">{{ selectedUserData.following ? Object.keys(selectedUserData.following).length : 0 }}</div>
+            </div>
+        </div>
+    </div>
+
+
+
+<!-- Botón para iniciar chat -->
+<button @click="chatWithUser(selectedUserData.id, selectedUserNickname)">
+    Chatear con {{ selectedUserNickname }}
+  </button>
+  
+  <!-- Componente de chat -->
+  <div v-if="currentChatId" class="chat-component">
+    <div class="chat-window">
+      <div class="chat-header">
+        <h3>{{ otherUserNickname }}</h3>
+        <button @click="currentChatId = null">Cerrar</button>
+      </div>
+      <div class="chat-messages" ref="chatMessages">
+        <div v-for="message in messages" :key="message.timestamp" 
+             :class="['message', { 'sent': message.senderId === userId, 'received': message.senderId !== userId }]">
+          <p>{{ message.content }}</p>
+          <small>{{ formatTimestamp(message.timestamp) }}</small>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Escribe un mensaje...">
+        <button @click="sendMessage">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  
+  
+
+
+    <!-- Barra de búsqueda -->
+    <input type="text" v-model="creatorSearchQuery" placeholder="Buscar por título..." class="search-bar" />
+
+    <!-- Lista de posts del creador -->
+    <div class="post-item" v-for="post in filteredCreatorPosts" :key="post.id + '-' + post.authorId + '-creatorpost'">
+        <h3>{{ post.title || 'Sin título' }}</h3>
+
+        <!-- Mostrar la imagen si existe -->
+        <div v-if="post.imageUrl" class="post-image-container">
+            <img :src="post.imageUrl" alt="Imagen del post" class="post-image-preview">
+        </div>
+        
+        <p v-html="stripHtml(post.content).slice(0, 150) + '...'"></p>
+        
+        <div class="post-meta">
+            <a href="#" @click.prevent="viewCreatorProfile(post.authorId)" class="author-link">
+                {{ post.authorNickname || 'Autor desconocido' }}
+            </a>
+            <span v-if="post.isOnline">
+                <i class="fa fa-circle" style="color: rgb(1, 156, 1);"></i>
+            </span>
+            | <i class="fa fa-eye"></i> {{ post.viewsCount || 0 }}
+        </div>
+
+        <div class="post-interactions">
+            <button @click="likePost(post.id, post.authorId)">
+                👍 {{ post.likeCount || 0 }} Likes
+            </button>
+            <button @click="openPost(post.id, post.authorId)">Ver más</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Popup para crear un nuevo post -->
+<div v-show="showCreatePostPopup" :key="createPostKey" class="modal" @click.self="closeCreatePostPopup">
+    <div class="modal-content">
+        <span class="close" @click="closeCreatePostPopup">&times;</span>
+        <h3>Crea un Nuevo Post</h3>
+        <input v-model="newPostTitle" type="text" placeholder="Título del post" required @input="checkPremiumImageRequirement">
+
+        <!-- Contenedor para el editor de Quill -->
+        <div id="editor"></div>
+
+        <input type="file" @change="handleImageUpload" accept="image/*" required>
+        
+        <!-- Solo permitir marcar como publicación premium si hay una imagen -->
+        <label class="checkbox-label">
+            <input type="checkbox" v-model="isPremium" @change="checkPremiumImageRequirement"> Marcar como publicación premium
+        </label>
+
+        <div v-if="isPremium && !hasCompletedShortenerSteps" class="premium-warning">
+            <p class="premium-warning-text">Para poder publicar un post premium, por favor sigue los pasos del acortador de enlaces.</p>
+            <a href="https://justcut.io/creadorapp" target="_blank" class="premium-link">Ir al acortador de enlaces</a>
+            <br>
+            <a href="#" v-if="showCompletionLink" @click="handleShortenerCompletion()" class="premium-link">He completado los pasos</a>
+        </div>
+        
+        
+        
+        <p v-if="isUploading">{{ uploadStatusMessage }}</p>
+        <p v-if="uploadProgress">{{ uploadProgress }}</p>
+        <button class="publish-button" @click="createPost" :disabled="isUploading || !canPublish">Publicar</button>
+      
+        <!-- Mensaje de advertencia si falta la imagen -->
+        <p v-if="isPremium && !newPostImageUrl" style="color: red;">Debes subir una imagen para publicar como premium.</p>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- Sección de Autenticación -->
+<div v-if="currentSection === 'auth'" class="auth-container">
+    <h2>{{ isRegistering ? 'Registro' : 'Inicio de Sesión' }}</h2>
+
+    <!-- Campos de correo y contraseña solo se muestran si el usuario no es nuevo en Google -->
+    <input v-if="!isNewGoogleUser" v-model="email" type="email" placeholder="Correo electrónico">
+    <input v-if="!isNewGoogleUser" v-model="password" type="password" placeholder="Contraseña">
+
+    <!-- Mostrar el campo de nickname si es un nuevo registro o si es un nuevo usuario de Google -->
+    <input v-if="isRegistering || isNewGoogleUser" v-model="nickname" type="text" placeholder="Nickname">
+
+    <!-- Botón para guardar el nickname solo si es un nuevo usuario de Google -->
+    <button v-if="isNewGoogleUser" @click="saveGoogleUserNickname">Guardar Nickname</button>
+    
+    <!-- Botón de Registro con Google -->
+    <button v-if="!isNewGoogleUser && isRegistering" @click="signInWithGoogle">Registrarse con Google</button>
+    
+    <!-- Botón de Iniciar sesión con Google en la sección de Inicio de Sesión -->
+    <button v-if="!isNewGoogleUser && !isRegistering" @click="signInWithGoogle">Iniciar sesión con Google</button>
+
+    <button v-if="!isNewGoogleUser" @click="isRegistering ? register() : login()">
+        {{ isRegistering ? 'Registrarse' : 'Iniciar Sesión' }}
+    </button>
+    
+    <p v-if="!isNewGoogleUser" @click="toggleAuthMode">
+        {{ isRegistering ? '¿Ya tienes una cuenta? Inicia Sesión' : '¿No tienes una cuenta? Regístrate' }}
+    </p>
+</div>
+
+
+
+
+
+
+<!-- Modal de anuncio -->
+<div class="announcement-modal-overlay" v-if="showAnnouncementModal" @click="closeAnnouncement"></div>
+<div class="announcement-modal" v-if="showAnnouncementModal">
+    <button class="close-btn" @click="closeAnnouncement">&times;</button>
+    <h2>¡Novedades en la aplicación!</h2>
+    <ul class="announcement-list">
+        <li>Puedes activar el modo oscuro (aun hay errores).</li>
+        <li>Ahora puedes ver cuando tu creador favorito está en línea. Verás un círculo verde a la par del nombre.</li>
+        <li>Ademas puedes ver los posts premium haciendo clic en el botón de "Ver más".</li>
+    </ul>
+    <p>Por favor, recuerda limpiar la caché de tu navegador para asegurarte de que estás viendo la versión más reciente de la aplicación.</p>
+    <p class="announcement-date">Última actualización: {{ lastUpdateDate }}</p>
+    <button @click="closeAnnouncement" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Entendido</button>
+</div>
+
+<!-- Modal de areglas -->
+<div v-if="showRulesModal" class="modal">
+    <div class="modal-content">
+      <h2>Reglas para Creadores</h2>
+      <ul>
+        <li><strong>Contenido Original:</strong> Todo el contenido debe ser original y creado por ti. No se permite la publicación de contenido que infrinja derechos de autor, incluyendo textos, imágenes, videos, música, etc.</li><br>
+        <li><strong>Prohibido el Contenido Ofensivo:</strong> No se permite la publicación de contenido que sea ofensivo, difamatorio, discriminatorio, o que incite al odio o la violencia.</li><br>
+        <li><strong>Prohibido el Contenido Adulto:</strong> No se permite la publicación de contenido pornográfico, sexualmente explícito, o cualquier material para adultos.</li><br>
+        <li><strong>Respeto a la Privacidad:</strong> No publiques información personal de otros sin su consentimiento expreso. Esto incluye nombres, direcciones, números de teléfono, y otros datos sensibles.</li><br>
+        <li><strong>Prohibido el Spam:</strong> No utilices la plataforma para enviar mensajes no solicitados, hacer spam o cualquier tipo de publicidad sin autorización.</li><br>
+        <li><strong>Cumplimiento Legal:</strong> Asegúrate de que todo el contenido cumple con las leyes y regulaciones locales, nacionales e internacionales aplicables.</li><br>
+        <li><strong>Cero Tolerancia al Plagio:</strong> Cualquier intento de plagio resultará en la eliminación del contenido y podría llevar a la suspensión o eliminación de tu cuenta.</li><br>
+        <li><strong>Responsabilidad:</strong> Eres el único responsable del contenido que publicas. La plataforma no se hace responsable por las infracciones que puedas cometer.</li>
+      </ul>
+      <button @click="acceptRules">Aceptar y Continuar</button>
+    </div>
+  </div>
+  
+  <!-- Panel de Administración para Revisar las Solicitudes -->
+  <div v-if="isAdmin && currentSection === 'adminPanel'">
+    <h2>Solicitudes de Verificación</h2>
+    <div v-for="(request, requestId) in verificationRequests" :key="requestId" class="verification-request">
+        <p><strong>{{ request.nickname }}</strong> solicitó la verificación el {{ formatTimestamp(request.timestamp) }}</p>
+        <button @click="approveVerification(requestId)">Aprobar</button>
+        <button @click="rejectVerification(requestId)">Rechazar</button>
+    </div>
+</div>
+
+
+<div v-if="currentSection === 'chats'" class="chats-container">
+    <h2>Mis Chats</h2>
+    <div v-if="chats.length === 0" class="no-chats-message">
+      No tienes chats activos.
+    </div>
+    <div v-else class="chat-list">
+      <div v-for="chat in chats" :key="chat.id" @click="openChat(chat.id, chat.otherUserId, chat.otherUserNickname)" class="chat-preview">
+        <strong>{{ chat.otherUserNickname }}</strong>
+        <p>{{ chat.lastMessage }}</p>
+        <small>{{ formatTimestamp(chat.timestamp) }}</small>
+        <span v-if="chat.unreadCount" class="unread-badge">{{ chat.unreadCount }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="currentSection === 'chat'" class="chat-window">
+    <div class="chat-header">
+      <h3>{{ otherUserNickname }}</h3>
+      <button @click="closeChat">Cerrar</button>
+    </div>
+    <div class="chat-messages" ref="chatMessages">
+      <div v-for="message in messages" :key="message.timestamp" 
+           :class="['message', { 'sent': message.senderId === userId, 'received': message.senderId !== userId }]">
+        <p>{{ message.content }}</p>
+        <small>{{ formatTimestamp(message.timestamp) }}</small>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Escribe un mensaje...">
+      <button @click="sendMessage">Enviar</button>
+    </div>
+  </div>
+
+  <!-- Modal de reporte -->
+<div v-if="showReportModalFlag" class="modal">
+    <div class="modal-content">
+      <h3>Reportar Post</h3>
+      <p>Título del post: {{ reportedPost.title }}</p>
+      <select v-model="reportReason">
+        <option value="">Seleccione una razón</option>
+        <option value="spam">Spam</option>
+        <option value="inappropriate">Contenido inapropiado</option>
+        <option value="copyright">Violación de derechos de autor</option>
+        <option value="other">Otro</option>
+      </select>
+      <textarea v-model="reportComment" placeholder="Comentarios adicionales"></textarea>
+      <input type="file" @change="handleReportImage" accept="image/*">
+      <button @click="submitReport">Enviar Reporte</button>
+      <button @click="closeReportModal">Cancelar</button>
+    </div>
+  </div>
+  
+  <!-- Sección de administración de reportes (solo visible para admins) -->
+  <div v-if="isAdmin && currentSection === 'reportManagement'" class="report-management">
+    <h2>Gestión de Reportes</h2>
+    <div v-if="reports.length === 0">No hay reportes pendientes.</div>
+    <div v-else>
+      <div v-for="report in reports" :key="report.id" class="report-item">
+        <h3>{{ report.postTitle || 'Título no disponible' }}</h3>
+        <p><strong>Razón:</strong> {{ report.reason || 'No especificada' }}</p>
+        <p><strong>Comentario:</strong> {{ report.comment || 'Sin comentario' }}</p>
+        <p><strong>Reportado por:</strong> {{ report.reporterNickname || 'Usuario desconocido' }}</p>
+        <p><strong>Fecha:</strong> {{ formatTimestamp(report.timestamp) }}</p>
+        <img v-if="report.imageUrl" :src="report.imageUrl" alt="Evidencia" class="report-image">
+        <div class="report-actions">
+          <button @click="viewReportedPost(report.postId)">Ver Post</button>
+          <button @click="deleteReportedPost(report.postId, report.id)">Eliminar Post</button>
+          <button @click="sendWarningToCreator(report.creatorId, report.id)">Advertir al Creador</button>
+          <button @click="dismissReport(report.id)">Descartar Reporte</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+<!-- Footer -->
+<footer>
+
+</footer>
+
+  
+
+
+</div>
+
+
+
+
+  <!-- Scripts -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-database.js"></script>
+
+
+  <script src="app.js"></script>
+  
+  <script>
+    if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+      console.log('Service Worker registrado con éxito:', registration.scope);
+    }, function(error) {
+      console.log('Error al registrar el Service Worker:', error);
+    });
+  });
+}
+  </script>
+
+
+</body>
+</html>
